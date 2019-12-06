@@ -20,7 +20,7 @@ def addSite():
         else:
             break
     while True:
-        abbr = str(input(f'''Some suggested codes - {", ".join(findaname.findabbrs(name))}\nYour preferred 3 character site code: ''')).upper()
+        abbr = str(input(f'''Some suggested codes - {", ".join(findaname.findabbrs(name,10))}\nYour preferred 3 character site code: ''')).upper()
         if len(abbr) != 3:
             print("Length of code must be 3")
         elif len(fetchByID(row,column,abbr)) == 1:
@@ -55,6 +55,7 @@ st = True
 class InvalidInputError(Exception):
     """This is not one of the options"""
     pass
+
 while True:
     try:
         inp = int(input(

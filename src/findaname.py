@@ -1,21 +1,20 @@
 import random
-def findabbrs(str)
+def findabbrs(str, number=20):
     l=len(str)
-    disp,p=[],[]
-    for i in range(l):
-        p.append((ord(str[i].upper())))
-    while len(disp)<5:
-        n=0
-        p1=p.copy()
-        cd=""
-        for i in range(3):
+    disp=[]
+    p=str.upper()
+    while len(disp)<number:
+        loop_completed=True
+        p1=p[1:]
+        cd=str[0]
+        for i in range(2):
             q=random.choice(p1)
-            cd=cd+(chr(q))
-            del p1[:(p1.index(q)+1)]
-            if len(p1)<1:
-                n=1
+            cd=cd+q
+            p1 = p1[(p1.find(q)+1):]
+            if len(p1) < 1:
+                loop_completed=False
                 break
-        if cd in disp or n==1:
+        if cd in disp or not loop_completed:
             continue
         else:
             disp.append(cd)
