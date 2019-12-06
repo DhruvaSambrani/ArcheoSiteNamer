@@ -1,5 +1,8 @@
 import configparser
-import os.path
+from os.path import expanduser as homepath, exists as fileExists
+from os import makedirs
+
+settingsFilePath = homepath('~/.ArcheoSiteNamer/settings.ini')
 
 def resetToDefaults():
     config["SETTINGS"]={}
@@ -30,12 +33,13 @@ def changeSettings():
             print("Program error, notify developers\nSettings:", e)
         print()
 def save():
-    with open('inits.ini', 'w') as configfile:
+    with open(settingsFilePath, 'w') as configfile:
         config.write(configfile)
 def initialise():
-    if (os.path.exists("inits.ini")):
+    makedirs(homepath('~/.ArcheoSiteNamer'),exist_ok=True)
+    if (fileExists(settingsFilePath)):
         try:
-            config.read('inits.ini')
+            config.read(settingsFilePath)
             global settings
             settings = config["SETTINGS"]
             if not settings.getint("desc_length"):
@@ -43,8 +47,8 @@ def initialise():
         except Exception as e:
             print(e)
             print("Settings file is corrupt. Edit the file directly or reset to default.")
-            print("inits.ini")
-            with open("inits.ini","r") as f:
+            print(settingsFilePath)
+            with open(settingsFilePath,"r") as f:
                 print(f.read())
             if input("Reset ALL Settings to default? Y to reset, any key to exit: ").upper()=="Y":
                 resetToDefaults()

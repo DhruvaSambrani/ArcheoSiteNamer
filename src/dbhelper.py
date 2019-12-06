@@ -1,7 +1,8 @@
 import sqlite3
 from settings import settings
+from os.path import expanduser as homepath
 
-conn = sqlite3.connect('database.db')
+conn = sqlite3.connect(homepath('~/.ArcheoSiteNamer/database.db'))
 c = conn.cursor()
 
 headers=["Site Name", "Site Code", "Site Description", "Researcher", "Old Code"]
