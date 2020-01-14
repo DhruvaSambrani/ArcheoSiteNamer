@@ -3,6 +3,7 @@ from dbhelper import fetchAll, fetchByID, headers, cleanup as dbcleanup, createT
 from tabulate import tabulate
 import atexit
 from settings import changeSettings as Settings
+from zonefinder import getMajorZone, getMinorZone
 
 @atexit.register
 def cleanup():
@@ -13,17 +14,20 @@ def cleanup():
 def addSite():
     name = str(input("Enter the name of the site: ")).capitalize()
     while True:
-        row = str(input("Row Value of site: ")).upper()
-        column = str(input("Column Value of site: ")).upper()
-        if len(row)!=1 or len(column)!=1:
-            print("Length of Row and column must be 1")
-        else:
+        lat = float(input("Latitude of site: "))
+        lng = float(input("Longitude of site: "))
+        try:
+            majorZone = getMajorZone(lat, lng)
+            minorZone = getMinorZone(lat, lng)
             break
+        except InvalidLocationError:
+            print("There is no zone here. Check your location again")
+
     while True:
         abbr = str(input(f'''Some suggested codes - {", ".join(findaname.findabbrs(name,10))}\nYour preferred 3 character site code: ''')).upper()
         if len(abbr) != 3:
             print("Length of code must be 3")
-        elif len(fetchByID(row,column,abbr)) == 1:
+        elif len(fetchByID(majorZone,minorZone,abbr)) == 1:
             print("Site Code already used.")
             print(tabulate(fetchByID(row,column,abbr), headers=headers, tablefmt="github"), "\n")
         else:
@@ -34,14 +38,14 @@ def addSite():
     oldcode = str(input("Old code: "))
     if input(
         f"Site Name - {name}\n"
-        f"Site Code - {row+column+abbr}\n"
+        f"Site Code - {majorZone+minorZone+abbr}\n"
         f"Site Description - {description}\n"
         f"Researcher - {researcher}\n"
         f"Old Code - {oldcode}\n"
         f"Enter 0 to reject, any key to accept: "
     ) != "0":
         try :
-            insert(row, column, name, abbr, description, researcher, oldcode)
+            insert(majorZone, minorZone, lat, lng, name, abbr, description, researcher, oldcode)
             commit()
             print("Site added to database")
         except Exception as e:
