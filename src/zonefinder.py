@@ -1,18 +1,18 @@
 import json
-_json_data = json.load(open("res/zonemaping.json"))
-_major_width = _json_data["majorWidth"]
-_minor_width = _json_data["minorWidth"]
-_start_lng = _json_data["startLng"]
-_end_lat = _json_data["endLat"]
-_major_zones = {}
-for key in _json_data["majorZones"].keys():
-    _major_zones[tuple(int(i) for i in key.split(","))
-                 ] = _json_data["majorZones"][key]
-_minor_zones = {}
-for key in _json_data["minorZones"].keys():
-    _minor_zones[tuple(int(i) for i in key.split(","))
-                 ] = _json_data["minorZones"][key]
-del _json_data
+_JSON_DATA = json.load(open("res/zonemaping.json"))
+_MAJOR_WIDTH = _JSON_DATA["majorWidth"]
+_MINOR_WIDTH = _JSON_DATA["minorWidth"]
+_START_LNG = _JSON_DATA["startLng"]
+_END_LAT = _JSON_DATA["endLat"]
+_MAJOR_ZONES = {}
+for key in _JSON_DATA["majorZones"].keys():
+    _MAJOR_ZONES[tuple(int(i) for i in key.split(","))
+                 ] = _JSON_DATA["majorZones"][key]
+_MINOR_ZONES = {}
+for key in _JSON_DATA["minorZones"].keys():
+    _MINOR_ZONES[tuple(int(i) for i in key.split(","))
+                 ] = _JSON_DATA["minorZones"][key]
+del _JSON_DATA
 
 
 class InvalidLocationError(Exception):
@@ -20,18 +20,18 @@ class InvalidLocationError(Exception):
 
 
 def get_major_zone(lat, lng):
-    if _end_lat < lat or lng < _start_lng:
+    if _END_LAT < lat or lng < _START_LNG:
         raise InvalidLocationError("No zone here")
-    row = (_end_lat - lat) // _major_width
-    col = (lng - _start_lng) // _major_width
+    row = (_END_LAT - lat) // _MAJOR_WIDTH
+    col = (lng - _START_LNG) // _MAJOR_WIDTH
     try:
-        major = _major_zones[(row, col)]
+        major = _MAJOR_ZONES[(row, col)]
         return major
     except KeyError:
         raise InvalidLocationError("No zone here")
 
 
 def get_minor_zone(lat, lng):
-    row = ((_end_lat - lat) % _major_width) // _minor_width
-    column = ((lng - _start_lng) % _major_width) // _minor_width
-    return _minor_zones[(row, column)]
+    row = ((_END_LAT - lat) % _MAJOR_WIDTH) // _MINOR_WIDTH
+    column = ((lng - _START_LNG) % _MAJOR_WIDTH) // _MINOR_WIDTH
+    return _MINOR_ZONES[(row, column)]

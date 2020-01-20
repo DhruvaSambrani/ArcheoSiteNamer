@@ -3,8 +3,10 @@ from settings import SETTINGS, save
 import atexit
 from tabulate import tabulate
 import findaname
-from dbhelper import fetch_all, fetch_by_id, HEADERS, createTable, insert
-from dbhelper import delete_all, cleanup as dbcleanup, commit_changes as commit
+from dbhelper import fetch_all, fetch_by_id, HEADERS, delete_all, insert
+from dbhelper import initialise as dbinit
+from dbhelper import cleanup as dbcleanup
+from dbhelper import commit_changes as commitdb
 
 
 @atexit.register
@@ -18,13 +20,13 @@ def cleanup():
 def change_settings():
     while True:
         try:
-            INP = int(input(
+            SETTINGS_INPUT = int(input(
                 "Settings Page\n"
                 "1. Set length of description to be displayed in Table\n"
                 "0. Exit Settings\n"
                 "Your option: "
             ))
-            if INP == 1:
+            if SETTINGS_INPUT == 1:
                 while True:
                     inp2 = str(
                         input(f"Old value:{SETTINGS.getint('desc_length')}"
@@ -34,7 +36,7 @@ def change_settings():
                         break
                     else:
                         print("Invalid input")
-            if INP == 0:
+            if SETTINGS_INPUT == 0:
                 save()
                 break
         except Exception as e:
@@ -98,7 +100,7 @@ def add_site():
                 description,
                 researcher,
                 oldcode)
-            commit()
+            commitdb()
             print("Site added to database")
         except Exception as e:
             print("Database error - ", e)
@@ -106,15 +108,12 @@ def add_site():
         print("Site add rejected")
 
 
-# ================= Main ============== #
-createTable()
-st = True
-
-
 class InvalidInputError(Exception):
     """This is not one of the options"""
 
 
+# ================= Main ============== #
+dbinit()
 while True:
     try:
         INP = int(input(

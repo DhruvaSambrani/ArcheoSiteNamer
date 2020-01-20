@@ -2,9 +2,8 @@ import sqlite3
 from settings import settings
 from os.path import expanduser as homepath
 
-_CONN = sqlite3.connect(homepath('~/.ArcheoSiteNamer/database.db'))
-_CURSOR = _CONN.cursor()
-
+_CONN = None
+_CURSOR = None
 HEADERS = [
     "Site Name",
     "Site Code",
@@ -21,6 +20,13 @@ _ATTRMAP = {
     "description": 6,
     "researcher": 7,
     "oldcode": 8}
+
+
+def initialise():
+    global _CONN, _CURSOR
+    _CONN = sqlite3.connect(homepath('~/.ArcheoSiteNamer/database.db'))
+    _CURSOR = _CONN.cursor()
+    _create_table()
 
 
 def _create_table():
@@ -71,18 +77,18 @@ def format_row(row):
     return temp
 
 
-def execute_sql(s):
-    _CURSOR.execute(s)
+def execute_sql(query):
+    _CURSOR.execute(query)
 
 
-def insert(majorZone, minorZone, latitude, longitude,
+def insert(major_zone, minor_zone, latitude, longitude,
            name, abbr, description, researcher, oldcode):
     """
     Inserts values into db.
     Parameters
     ----------
-    majorZone
-    minorZone
+    major_zone
+    minor_zone
     latitude
     longitude
     name
@@ -93,8 +99,8 @@ def insert(majorZone, minorZone, latitude, longitude,
     """
     _CURSOR.execute(
         "INSERT INTO mainTable VALUES (?,?,?,?,?,?,?,?,?)",
-        (majorZone,
-         minorZone,
+        (major_zone,
+         minor_zone,
          latitude,
          longitude,
          name,

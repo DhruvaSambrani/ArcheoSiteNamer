@@ -2,37 +2,41 @@ import configparser
 from os.path import expanduser as homepath, exists as fileExists
 from os import makedirs
 
-_settings_file_path = homepath('~/.ArcheoSiteNamer/settings.ini')
+_SETTINGS_FILE_PATH = homepath('~/.ArcheoSiteNamer/settings.ini')
 
 
 def reset_to_defaults():
-    _config["SETTINGS"] = {}
+    _CONFIG["SETTINGS"] = {}
     global SETTINGS
-    SETTINGS = _config["SETTINGS"]
+    SETTINGS = _CONFIG["SETTINGS"]
     SETTINGS["desc_length"] = "20"
     save()
 
 
 def save():
-    with open(_settings_file_path, 'w') as _configfile:
-        _config.write(_configfile)
+    with open(_SETTINGS_FILE_PATH, 'w') as _configfile:
+        _CONFIG.write(_configfile)
+
+
+class CorruptSettingsError(Exception):
+    """Settings file is corrupt"""
 
 
 def initialise():
     makedirs(homepath('~/.ArcheoSiteNamer'), exist_ok=True)
-    if fileExists(_settings_file_path):
+    if fileExists(_SETTINGS_FILE_PATH):
         try:
-            _config.read(_settings_file_path)
+            _CONFIG.read(_SETTINGS_FILE_PATH)
             global SETTINGS
-            SETTINGS = _config["SETTINGS"]
+            SETTINGS = _CONFIG["SETTINGS"]
             if not SETTINGS.getint("desc_length"):
-                raise Exception("Corrupt Settings Values")
+                raise CorruptSettingsError("Corrupt Settings Values")
         except Exception as e:
             print(e)
             print("Settings file is corrupt."
                   " Edit the file directly or reset to default.")
-            print(_settings_file_path)
-            with open(_settings_file_path, "r") as file:
+            print(_SETTINGS_FILE_PATH)
+            with open(_SETTINGS_FILE_PATH, "r") as file:
                 print(file.read())
             if input(
                     "Reset ALL Settings to default? "
@@ -47,6 +51,6 @@ def initialise():
         initialise()
 
 
-_config = configparser.configParser()
+_CONFIG = configparser.configParser()
 SETTINGS = {}
 initialise()
