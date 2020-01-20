@@ -1,9 +1,6 @@
 import sqlite3
-from settings import settings
 from os.path import expanduser as homepath
 
-_CONN = None
-_CURSOR = None
 HEADERS = [
     "Site Name",
     "Site Code",
@@ -20,13 +17,6 @@ _ATTRMAP = {
     "description": 6,
     "researcher": 7,
     "oldcode": 8}
-
-
-def initialise():
-    global _CONN, _CURSOR
-    _CONN = sqlite3.connect(homepath('~/.ArcheoSiteNamer/database.db'))
-    _CURSOR = _CONN.cursor()
-    _create_table()
 
 
 def _create_table():
@@ -64,14 +54,14 @@ def fetch_all():
             for row in _CURSOR.execute("SELECT * FROM mainTable")]
 
 
-def format_row(row):
+def format_row(row, desc_length=20):
     temp = []
     temp.append(row[_ATTRMAP["name"]])
     temp.append(row[_ATTRMAP["majorZone"]] +
                 row[_ATTRMAP["minorZone"]] +
                 row[_ATTRMAP["abbr"]])
-    temp.append(row[_ATTRMAP["description"]][:settings.getint(
-        "desc_length")] + (row[4][settings.getint("desc_length"):] and '...'))
+    temp.append(row[_ATTRMAP["description"]][:desc_length]
+                + (row[4][desc_length:] and '...'))
     temp.append(row[_ATTRMAP["researcher"]])
     temp.append(row[_ATTRMAP["oldcode"]])
     return temp
@@ -121,3 +111,9 @@ def commit_changes():
 def cleanup():
     _CONN.commit()
     _CONN.close()
+
+
+# =========== INIT ============== #
+_CONN = sqlite3.connect(homepath('~/.ArcheoSiteNamer/database.db'))
+_CURSOR = _CONN.cursor()
+_create_table()

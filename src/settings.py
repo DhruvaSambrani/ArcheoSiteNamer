@@ -5,11 +5,10 @@ from os import makedirs
 _SETTINGS_FILE_PATH = homepath('~/.ArcheoSiteNamer/settings.ini')
 
 
-def reset_to_defaults():
+def reset_to_defaults(settings_dict):
     _CONFIG["SETTINGS"] = {}
-    global SETTINGS
-    SETTINGS = _CONFIG["SETTINGS"]
-    SETTINGS["desc_length"] = "20"
+    settings_dict = _CONFIG["SETTINGS"]
+    settings_dict["desc_length"] = "20"
     save()
 
 
@@ -22,14 +21,13 @@ class CorruptSettingsError(Exception):
     """Settings file is corrupt"""
 
 
-def initialise():
+def initialise(settings_dict):
     makedirs(homepath('~/.ArcheoSiteNamer'), exist_ok=True)
     if fileExists(_SETTINGS_FILE_PATH):
         try:
             _CONFIG.read(_SETTINGS_FILE_PATH)
-            global SETTINGS
-            SETTINGS = _CONFIG["SETTINGS"]
-            if not SETTINGS.getint("desc_length"):
+            settings_dict = _CONFIG["SETTINGS"]
+            if not settings_dict.getint("desc_length"):
                 raise CorruptSettingsError("Corrupt Settings Values")
         except CorruptSettingsError as e:
             print(e)
@@ -42,7 +40,7 @@ def initialise():
                     "Reset ALL Settings to default? "
                     "Y to reset, any key to exit: ").upper() == "Y":
                 reset_to_defaults()
-                initialise()
+                initialise(settings_dict)
             else:
                 print("Exiting...")
                 exit()
@@ -53,4 +51,4 @@ def initialise():
 
 _CONFIG = configparser.configParser()
 SETTINGS = {}
-initialise()
+initialise(SETTINGS)
