@@ -1,32 +1,37 @@
 import json
-jsonData = json.load(open("res/zonemaping.json"))
-_majorWidth = jsonData["majorWidth"]
-_minorWidth = jsonData["minorWidth"]
-_startLng = jsonData["startLng"]
-_endLat = jsonData["endLat"]
-_majorZones = {}
-for key in jsonData["majorZones"].keys():
-    _majorZones[tuple(int(i) for i in key.split(","))] = jsonData["majorZones"][key]
+_json_data = json.load(open("res/zonemaping.json"))
+_major_width = _json_data["majorWidth"]
+_minor_width = _json_data["minorWidth"]
+_start_lng = _json_data["startLng"]
+_end_lat = _json_data["endLat"]
+_major_zones = {}
+for key in _json_data["majorZones"].keys():
+    _major_zones[tuple(int(i) for i in key.split(","))
+                 ] = _json_data["majorZones"][key]
 _minorZones = {}
-for key in jsonData["minorZones"].keys():
-    _minorZones[tuple(int(i) for i in key.split(","))] = jsonData["minorZones"][key]
-del jsonData
+for key in _json_data["minorZones"].keys():
+    _minorZones[tuple(int(i) for i in key.split(","))
+                ] = _json_data["minorZones"][key]
+del _json_data
+
 
 class InvalidLocationError(Exception):
     pass
 
-def getMajorZone(lat, lng):
-    if _endLat<lat or lng<_startLng:
+
+def get_major_zone(lat, lng):
+    if _end_lat < lat or lng < _start_lng:
         raise InvalidLocationError("No zone here")
-    row = (_endLat - lat) // _majorWidth
-    col = (lng - _startLng) // _majorWidth
+    row = (_end_lat - lat) // _major_width
+    col = (lng - _start_lng) // _major_width
     try:
-        major = _majorZones[(row,col)]
+        major = _major_zones[(row, col)]
         return major
-    except (KeyError):
+    except KeyError:
         raise InvalidLocationError("No zone here")
 
-def getMinorZone(lat, lng):
-    row = ((_endLat - lat) % _majorWidth) // _minorWidth
-    column = ((lng - _startLng) % _majorWidth) // _minorWidth
-    return _minorZones[(row,column)]
+
+def get_minor_zone(lat, lng):
+    row = ((_end_lat - lat) % _major_width) // _minor_width
+    column = ((lng - _start_lng) % _major_width) // _minor_width
+    return _minorZones[(row, column)]
