@@ -20,13 +20,13 @@ def cleanup():
 def change_settings():
     while True:
         try:
-            SETTINGS_INPUT = int(input(
+            settings_input = int(input(
                 "Settings Page\n"
                 "1. Set length of description to be displayed in Table\n"
                 "0. Exit Settings\n"
                 "Your option: "
             ))
-            if SETTINGS_INPUT == 1:
+            if settings_input == 1:
                 while True:
                     inp2 = str(
                         input(f"Old value:{SETTINGS.getint('desc_length')}"
@@ -36,7 +36,7 @@ def change_settings():
                         break
                     else:
                         print("Invalid input")
-            if SETTINGS_INPUT == 0:
+            if settings_input == 0:
                 save()
                 break
         except Exception as e:

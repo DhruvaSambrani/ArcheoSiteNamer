@@ -31,7 +31,7 @@ def initialise():
             SETTINGS = _CONFIG["SETTINGS"]
             if not SETTINGS.getint("desc_length"):
                 raise CorruptSettingsError("Corrupt Settings Values")
-        except Exception as e:
+        except CorruptSettingsError as e:
             print(e)
             print("Settings file is corrupt."
                   " Edit the file directly or reset to default.")
