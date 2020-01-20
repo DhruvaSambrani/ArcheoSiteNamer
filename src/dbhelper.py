@@ -2,16 +2,16 @@ import sqlite3
 from settings import settings
 from os.path import expanduser as homepath
 
-_conn = sqlite3._connect(homepath('~/.ArcheoSiteNamer/database.db'))
-_cursor = _conn.cursor()
+_CONN = sqlite3.connect(homepath('~/.ArcheoSiteNamer/database.db'))
+_CURSOR = _CONN.cursor()
 
-headers = [
+HEADERS = [
     "Site Name",
     "Site Code",
     "Site Description",
     "Researcher",
     "Old Code"]
-_attrmap = {
+_ATTRMAP = {
     "majorZone": 0,
     "minorZone": 1,
     "latitude": 2,
@@ -23,8 +23,8 @@ _attrmap = {
     "oldcode": 8}
 
 
-def createTable():
-    _cursor.execute('''
+def _create_table():
+    _CURSOR.execute('''
     CREATE TABLE IF NOT EXISTS "mainTable" (
         "majorZone" TEXT NOT NULL,
         "minorZone" TEXT NOT NULL,
@@ -39,40 +39,40 @@ def createTable():
         UNIQUE("majorZone", "minorZone", "abbr")
     )
     ''')
-    return _cursor
+    return _CURSOR
 
 
 def fetch_by_id(major, minor, abbr):
-    return [format_row(row) for row in _cursor.execute(
+    return [format_row(row) for row in _CURSOR.execute(
         f"SELECT * FROM mainTable WHERE majorZone = '{major}' AND "
         f"minorZone = '{minor}' AND abbr = '{abbr}'")]
 
 
 def fetch_by_researcher(researcher):
-    return [format_row(row) for row in _cursor.execute(
+    return [format_row(row) for row in _CURSOR.execute(
         f"SELECT * FROM mainTable WHERE researcher = '{researcher}'")]
 
 
 def fetch_all():
     return [format_row(row)
-            for row in _cursor.execute("SELECT * FROM mainTable")]
+            for row in _CURSOR.execute("SELECT * FROM mainTable")]
 
 
 def format_row(row):
     temp = []
-    temp.append(row[_attrmap["name"]])
-    temp.append(row[_attrmap["majorZone"]] +
-                row[_attrmap["minorZone"]] +
-                row[_attrmap["abbr"]])
-    temp.append(row[_attrmap["description"]][:settings.getint(
+    temp.append(row[_ATTRMAP["name"]])
+    temp.append(row[_ATTRMAP["majorZone"]] +
+                row[_ATTRMAP["minorZone"]] +
+                row[_ATTRMAP["abbr"]])
+    temp.append(row[_ATTRMAP["description"]][:settings.getint(
         "desc_length")] + (row[4][settings.getint("desc_length"):] and '...'))
-    temp.append(row[_attrmap["researcher"]])
-    temp.append(row[_attrmap["oldcode"]])
+    temp.append(row[_ATTRMAP["researcher"]])
+    temp.append(row[_ATTRMAP["oldcode"]])
     return temp
 
 
-def executeSQL(s):
-    _cursor.execute(s)
+def execute_sql(s):
+    _CURSOR.execute(s)
 
 
 def insert(majorZone, minorZone, latitude, longitude,
@@ -91,7 +91,7 @@ def insert(majorZone, minorZone, latitude, longitude,
     researcher
     oldcode
     """
-    _cursor.execute(
+    _CURSOR.execute(
         "INSERT INTO mainTable VALUES (?,?,?,?,?,?,?,?,?)",
         (majorZone,
          minorZone,
@@ -105,13 +105,13 @@ def insert(majorZone, minorZone, latitude, longitude,
 
 
 def delete_all():
-    _cursor.execute('''DELETE FROM "mainTable"''')
+    _CURSOR.execute('''DELETE FROM "mainTable"''')
 
 
 def commit_changes():
-    _conn.commit()
+    _CONN.commit()
 
 
 def cleanup():
-    _conn.commit()
-    _conn.close()
+    _CONN.commit()
+    _CONN.close()

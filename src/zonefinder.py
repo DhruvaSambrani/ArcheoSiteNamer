@@ -8,10 +8,10 @@ _major_zones = {}
 for key in _json_data["majorZones"].keys():
     _major_zones[tuple(int(i) for i in key.split(","))
                  ] = _json_data["majorZones"][key]
-_minorZones = {}
+_minor_zones = {}
 for key in _json_data["minorZones"].keys():
-    _minorZones[tuple(int(i) for i in key.split(","))
-                ] = _json_data["minorZones"][key]
+    _minor_zones[tuple(int(i) for i in key.split(","))
+                 ] = _json_data["minorZones"][key]
 del _json_data
 
 
@@ -34,4 +34,4 @@ def get_major_zone(lat, lng):
 def get_minor_zone(lat, lng):
     row = ((_end_lat - lat) % _major_width) // _minor_width
     column = ((lng - _start_lng) % _major_width) // _minor_width
-    return _minorZones[(row, column)]
+    return _minor_zones[(row, column)]
