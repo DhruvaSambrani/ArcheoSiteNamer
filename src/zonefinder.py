@@ -1,5 +1,11 @@
 import json
-_JSON_DATA = json.load(open("res/zonemaping.json"))
+import sys
+import os
+try:
+    wd = sys._MEIPASS
+except AttributeError:
+    wd = os.path.dirname(__file__)
+_JSON_DATA = json.load(open(os.path.join(wd, "res/zonemapping.json")))
 _MAJOR_WIDTH = _JSON_DATA["majorWidth"]
 _MINOR_WIDTH = _JSON_DATA["minorWidth"]
 _START_LNG = _JSON_DATA["startLng"]
@@ -10,13 +16,13 @@ for key in _JSON_DATA["majorZones"].keys():
                  ] = _JSON_DATA["majorZones"][key]
 _MINOR_ZONES = {}
 for key in _JSON_DATA["minorZones"].keys():
-    _MINOR_ZONES[tuple(int(i) for i in key.split(","))
-                 ] = _JSON_DATA["minorZones"][key]
+    _MINOR_ZONES[
+        tuple(int(i) for i in key.split(","))] = _JSON_DATA["minorZones"][key]
 del _JSON_DATA
 
 
 class InvalidLocationError(Exception):
-    pass
+    """Raised when location does not exist in a zone"""
 
 
 def get_major_zone(lat, lng):

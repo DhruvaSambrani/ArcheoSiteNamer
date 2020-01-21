@@ -1,4 +1,4 @@
 # Main Coders
 
-- [@DhruvaSambrani](https://github.com/DhruvaSambrani)
-- [@madhums511](https://github.com/madhums511)
+- [Dhruva Sambrani](https://github.com/DhruvaSambrani)
+- [Madhumati Seetaraman](https://github.com/madhums511)

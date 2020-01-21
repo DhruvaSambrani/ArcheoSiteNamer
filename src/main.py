@@ -4,7 +4,6 @@ import atexit
 from tabulate import tabulate
 import findaname
 from dbhelper import fetch_all, fetch_by_id, HEADERS, delete_all, insert
-from dbhelper import initialise as dbinit
 from dbhelper import cleanup as dbcleanup
 from dbhelper import commit_changes as commitdb
 
@@ -113,7 +112,6 @@ class InvalidInputError(Exception):
 
 
 # ================= Main ============== #
-dbinit()
 while True:
     try:
         INP = int(input(

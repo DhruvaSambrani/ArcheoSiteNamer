@@ -1,2 +1,3 @@
-pyinstaller.exe .\src\main.py --add-data ".\src\res;res" -F
+@echo off
+pyinstaller.exe .\src\main.py --add-data "src\res;res" -n ArcheoSiteNamer -F --noconfirm
 Pause
