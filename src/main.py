@@ -7,7 +7,7 @@ from dbhelper import fetch_all, fetch_by_id, HEADERS, delete_all, insert
 from dbhelper import cleanup as dbcleanup
 from dbhelper import commit_changes as commitdb
 
-
+# MADHU WAS HERE
 @atexit.register
 def cleanup():
     dbcleanup()
