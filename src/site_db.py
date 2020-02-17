@@ -7,6 +7,7 @@ HEADERS = [
     "Site Description",
     "Researcher",
     "Old Code"]
+
 _ATTRMAP = {
     "majorZone": 0,
     "minorZone": 1,
@@ -21,7 +22,7 @@ _ATTRMAP = {
 
 def _create_table():
     _CURSOR.execute('''
-    CREATE TABLE IF NOT EXISTS "mainTable" (
+    CREATE TABLE IF NOT EXISTS "siteTable" (
         "majorZone" TEXT NOT NULL,
         "minorZone" TEXT NOT NULL,
         "latitude" NUMBER NOT NULL,
@@ -40,18 +41,18 @@ def _create_table():
 
 def fetch_by_id(major, minor, abbr):
     return [format_row(row) for row in _CURSOR.execute(
-        f"SELECT * FROM mainTable WHERE majorZone = '{major}' AND "
+        f"SELECT * FROM siteTable WHERE majorZone = '{major}' AND "
         f"minorZone = '{minor}' AND abbr = '{abbr}'")]
 
 
 def fetch_by_researcher(researcher):
     return [format_row(row) for row in _CURSOR.execute(
-        f"SELECT * FROM mainTable WHERE researcher = '{researcher}'")]
+        f"SELECT * FROM siteTable WHERE researcher = '{researcher}'")]
 
 
 def fetch_all():
     return [format_row(row)
-            for row in _CURSOR.execute("SELECT * FROM mainTable")]
+            for row in _CURSOR.execute("SELECT * FROM siteTable")]
 
 
 def format_row(row, desc_length=20):
@@ -61,7 +62,7 @@ def format_row(row, desc_length=20):
                 row[_ATTRMAP["minorZone"]] +
                 row[_ATTRMAP["abbr"]])
     temp.append(row[_ATTRMAP["description"]][:desc_length]
-                + (row[4][desc_length:] and '...'))
+                + (row[_ATTRMAP["description"]][desc_length:] and '...'))
     temp.append(row[_ATTRMAP["researcher"]])
     temp.append(row[_ATTRMAP["oldcode"]])
     return temp
@@ -88,7 +89,7 @@ def insert(major_zone, minor_zone, latitude, longitude,
     oldcode
     """
     _CURSOR.execute(
-        "INSERT INTO mainTable VALUES (?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO siteTable VALUES (?,?,?,?,?,?,?,?,?)",
         (major_zone,
          minor_zone,
          latitude,
