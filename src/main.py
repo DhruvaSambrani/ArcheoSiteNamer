@@ -3,8 +3,8 @@ from settings import SETTINGS, save
 import atexit
 from tabulate import tabulate
 import findaname
-from dbhelper import fetch_all, fetch_by_id, HEADERS, delete_all, insert
-from dbhelper import cleanup as dbcleanup
+from site_db import fetch_all, fetch_by_id, HEADERS, delete_all, insert
+from papers_db import cleanup as dbcleanup
 from dbhelper import commit_changes as commitdb
 
 # MADHU WAS HERE
