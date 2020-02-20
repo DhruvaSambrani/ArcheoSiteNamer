@@ -1,7 +1,7 @@
 import sqlite3
 from os.path import expanduser as homepath
 
-HEADERS = [
+HEADERS_SITE = [
     "Site Name",
     "Site Code",
     "Site Description",
@@ -39,7 +39,7 @@ def _create_table():
     return _CURSOR
 
 
-def fetch_by_id(major, minor, abbr):
+def fetch_by_id_site(major, minor, abbr):
     return [format_row(row) for row in _CURSOR.execute(
         f"SELECT * FROM siteTable WHERE majorZone = '{major}' AND "
         f"minorZone = '{minor}' AND abbr = '{abbr}'")]
@@ -50,7 +50,7 @@ def fetch_by_researcher(researcher):
         f"SELECT * FROM siteTable WHERE researcher = '{researcher}'")]
 
 
-def fetch_all():
+def fetch_all_site():
     return [format_row(row)
             for row in _CURSOR.execute("SELECT * FROM siteTable")]
 
@@ -72,8 +72,8 @@ def execute_sql(query):
     _CURSOR.execute(query)
 
 
-def insert(major_zone, minor_zone, latitude, longitude,
-           name, abbr, description, researcher, oldcode):
+def insert_site(major_zone, minor_zone, latitude, longitude,
+                name, abbr, description, researcher, oldcode):
     """
     Inserts values into db.
     Parameters
@@ -101,7 +101,7 @@ def insert(major_zone, minor_zone, latitude, longitude,
          oldcode))
 
 
-def delete_all():
+def delete_all_site():
     _CURSOR.execute('''DELETE FROM "mainTable"''')
 
 

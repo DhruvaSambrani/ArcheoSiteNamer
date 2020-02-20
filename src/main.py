@@ -3,14 +3,20 @@ from settings import SETTINGS, save
 import atexit
 from tabulate import tabulate
 import findaname
-from dbhelper import fetch_all, fetch_by_id, HEADERS, delete_all, insert
-from dbhelper import cleanup as dbcleanup
-from dbhelper import commit_changes as commitdb
+from site_db import (fetch_all_site, fetch_by_id_site, HEADERS_SITE,
+                     delete_all_site, insert_site)
+from site_db import cleanup as dbcleanup_site
+from site_db import commit_changes as commitdb_site
+from resc_db import (fetch_by_rescID, fetch_all_resc, HEADERS_RESC,
+                     delete_all_resc, insert_resc)
+from site_db import cleanup as dbcleanup_resc
+from site_db import commit_changes as commitdb_resc
 
-# MADHU WAS HERE
+
 @atexit.register
 def cleanup():
-    dbcleanup()
+    dbcleanup_site()
+    dbcleanup_resc()
     print("Thanks for using!")
 
 # ================= Functions ============== #
@@ -62,15 +68,15 @@ def add_site():
             '''Your preferred 3 character site CODE: ''')).upper()
         if len(abbr) != 3:
             print("Length of CODE must be 3")
-        elif len(fetch_by_id(major_zone, minor_zone, abbr)) == 1:
+        elif len(fetch_by_id_site(major_zone, minor_zone, abbr)) == 1:
             print("Site CODE already used.")
             print(
                 tabulate(
-                    fetch_by_id(
+                    fetch_by_id_site(
                         major_zone,
                         minor_zone,
                         abbr),
-                    HEADERS=HEADERS,
+                    HEADERS=HEADERS_SITE,
                     tablefmt="github"),
                 "\n")
         else:
@@ -89,7 +95,7 @@ def add_site():
         f"Enter 0 to reject, any key to accept: "
     ) != "0":
         try:
-            insert(
+            insert_site(
                 major_zone,
                 minor_zone,
                 lat,
@@ -99,12 +105,39 @@ def add_site():
                 description,
                 researcher,
                 oldcode)
-            commitdb()
+            commitdb_site()
             print("Site added to database")
         except Exception as e:
             print("Database error - ", e)
     else:
         print("Site add rejected")
+
+
+def add_resc():
+    researcher = str(input("Name of researcher: "))
+    rescID = str(input("Researcher ID: "))
+    lab = str(input("Laboratory: "))
+    email = str(input("E-mail ID: "))
+    if input(
+        f"Researcher - {researcher}\n"
+        f"ResearcherID - {rescID}\n"
+        f"Laboratory - {lab}\n"
+        f"EmailID - {email}\n"
+        f"Enter 0 to reject, any key to accept: "
+    ) != "0":
+        try:
+            insert_resc(
+                researcher,
+                rescID,
+                lab,
+                email)
+            commitdb_resc()
+            print("Researcher added to database")
+        except Exception as e:
+            print("Database error - ", e)
+
+    else:
+        print("Researcher add rejected")
 
 
 class InvalidInputError(Exception):
@@ -116,33 +149,54 @@ while True:
     try:
         INP = int(input(
             "1. Add a new Site\n"
-            "2. List sites by CODE\n"
-            "3. List all sites\n"
-            "4. Clear all sites\n"
-            "5. Settings\n"
+            "2. Add a new Researcher\n"
+            "3. List sites by CODE\n"
+            "4. List sites by Researcher ID\n"
+            "5. List all sites\n"
+            "6. List all researchers\n"
+            "7. Clear database\n"
+            "8. Settings\n"
             "0. Exit\n"
             "Your input: "))
         if INP == 1:
             add_site()
         elif INP == 2:
+            add_resc()
+        elif INP == 3:
             while True:
                 CODE = input("Enter CODE: ")
                 if len(CODE) == 5:
                     break
                 print("Invalid CODE")
-            print(tabulate(fetch_by_id(CODE[0],
-                                       CODE[1],
-                                       CODE[2:]),
-                           headers=HEADERS,
+            print(tabulate(fetch_by_id_site(CODE[0],
+                                            CODE[1],
+                                            CODE[2:]),
+                           headers=HEADERS_SITE,
                            tablefmt="github"),
                   "\n")
-        elif INP == 3:
-            print(tabulate(fetch_all(), headers=HEADERS, tablefmt="github"))
         elif INP == 4:
-            if input("Are you sure?(y/N)").upper() == "Y":
-                delete_all()
-                print("Cleared")
+            while True:
+                ID = input("Enter ID: ")
+            print(tabulate(fetch_by_rescID(ID),
+                           headers=HEADERS_RESC,
+                           tablefmt="github"),
+                  "\n")
         elif INP == 5:
+            print(tabulate(fetch_all_site(), headers=HEADERS_SITE,
+                           tablefmt="github"))
+        elif INP == 6:
+            print(tabulate(fetch_all_resc(), headers=HEADERS_RESC,
+                           tablefmt="github"))
+        elif INP == 7:
+            print("1. Clear all sites\n",
+                  "2. Clear all researchers\n")
+            if int(input("Your choice: ")) == 1:
+                delete_all_site()
+                print("Site database cleared")
+            elif int(input("Your choice: ")) == 2:
+                delete_all_resc()
+                print("Researcher database cleared")
+        elif INP == 8:
             print()
             change_settings()
         elif INP == 0:
