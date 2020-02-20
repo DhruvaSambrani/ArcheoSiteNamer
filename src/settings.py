@@ -8,6 +8,7 @@ _SETTINGS_FILE_PATH = homepath('~/.ArcheoSiteNamer/settings.ini')
 def reset_to_defaults():
     _CONFIG["SETTINGS"] = {}
     _CONFIG["SETTINGS"]["desc_length"] = "20"
+    _CONFIG["SETTINGS"]["theme"] = "Dark Brown"
     save()
     return _CONFIG["SETTINGS"]
 

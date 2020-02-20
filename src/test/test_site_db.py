@@ -14,7 +14,4 @@ print("Fetch all")
 print("\nFetch by id ABAGC")
 print(sdb.fetch_by_id("A", "B", "AGC"))
 
-print("\nDeleting all")
-# [i.delete() for i in sdb.fetch_all()]
-
 db_commit()

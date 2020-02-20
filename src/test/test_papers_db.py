@@ -10,12 +10,11 @@ s.insert()
 pdb.Paper(["Title", "10.55e7.848", "A short introduction.",
            "dhruvasambrani19@gmail.com"]).insert()
 
-print("Fetch all")
-[print(i) for i in pdb.fetch_all()]
 
-print("\nFetch by doi 10.5537.848")
-print(pdb.fetch_by_doi("10.5537.848"))
+if len(pdb.fetch_all()) != 2:
+    raise BaseException("fetch_all failed!")
 
-# [i.delete() for i in pdb.fetch_all()]
+if "0.5537.848" != pdb.fetch_by_doi("10.5537.848").doi:
+    raise BaseException("fetch_by_doi failed!")
 
 db_commit()

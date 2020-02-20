@@ -5,3 +5,4 @@ import dbhelper
 
 dbhelper.init_db()
 print(dbhelper.execute_sql("SELECT * from sqlite_master").fetchone() or "hi")
+dbhelper.commit_changes()

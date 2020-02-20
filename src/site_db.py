@@ -12,7 +12,8 @@ fetch_all()
 fetch_by_sql()
 """
 
-from dbhelper import execute_sql
+from dbhelper import execute_sql, init_db
+init_db()
 
 
 class Site:
@@ -22,9 +23,13 @@ class Site:
 import pprsite_map
 
 HEADERS = [
-    "Site Name",
-    "Site Code",
-    "Site Description",
+    "Major Zone",
+    "Minor Zone",
+    "Latitude",
+    "Longitude",
+    "Code",
+    "Name",
+    "Description",
     "Old Code"]
 _ATTRMAP = {
     "majorZone": 0,
