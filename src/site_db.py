@@ -11,16 +11,13 @@ fetch_by_id()
 fetch_all()
 fetch_by_sql()
 """
-
+import pprsite_map
 from dbhelper import execute_sql, init_db
 init_db()
 
 
 class Site:
     pass
-
-
-import pprsite_map
 
 HEADERS = [
     "Major Zone",
