@@ -52,7 +52,7 @@ of the entry held in the database.
         """ Constructor
 Params
 ------
-self: Site
+self: Paper
 row: iterable
     iterable indexed according _ATTRMAP
 """

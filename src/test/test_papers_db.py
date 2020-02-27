@@ -14,7 +14,7 @@ pdb.Paper(["Title", "10.55e7.848", "A short introduction.",
 if len(pdb.fetch_all()) != 2:
     raise BaseException("fetch_all failed!")
 
-if "0.5537.848" != pdb.fetch_by_doi("10.5537.848").doi:
+if pdb.fetch_by_doi("10.5537.848").doi != "10.5537.848":
     raise BaseException("fetch_by_doi failed!")
 
 db_commit()
