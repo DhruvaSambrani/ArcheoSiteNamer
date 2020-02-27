@@ -6,7 +6,8 @@
   ]
   
   exclude_patterns = [
-    "src/main.py"
+    "src/main.py",
+    "src/gui_main.py"
   ]
   
   [[analyzers]]
