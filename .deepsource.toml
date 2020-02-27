@@ -4,7 +4,11 @@
     "src/tests/**",
     "**/test_*.py"
   ]
-
+  
+  exclude_patterns = [
+    "src/main.py"
+  ]
+  
   [[analyzers]]
   name = "python"
   enabled = true
