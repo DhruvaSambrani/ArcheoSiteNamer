@@ -14,11 +14,12 @@ HEADERS = [
     "E-mail ID"]
 _ATTRMAP = {
     "researcher": 0,
-    "rescID": 1,
+    "resc_id": 1,
     "lab": 2,
     "email": 3}
 
 
+# skipcq: PYL-E0102
 class Researcher:
     """ The Researcher object is a representation of a database with the
         following attributes:
@@ -37,7 +38,7 @@ class Researcher:
         delete(self)
 """
     researcher: str
-    rescID: str
+    resc_id: str
     lab: str
     email: str
 
@@ -50,14 +51,14 @@ row: iterable
     iterable indexed according _ATTRMAP
 """
         self.researcher = row[_ATTRMAP["researcher"]]
-        self.rescID = row[_ATTRMAP["rescID"]]
+        self.resc_id = row[_ATTRMAP["resc_id"]]
         self.lab = row[_ATTRMAP["lab"]]
         self.email = row[_ATTRMAP["email"]]
 
     def __str__(self):
         temp = {}
         temp["Researcher"] = self.researcher
-        temp["rescID"] = self.rescID
+        temp["resc_id"] = self.resc_id
         temp["lab"] = self.lab
         temp["EmailID"] = self.email
         return temp.__str__()
@@ -67,7 +68,7 @@ row: iterable
         execute_sql(
             "INSERT INTO rescTable VALUES (?,?,?,?)",
             (self.researcher,
-             self.rescID,
+             self.resc_id,
              self.lab,
              self.email))
 
@@ -76,18 +77,18 @@ row: iterable
         execute_sql(
             f'''
             DELETE FROM "rescTable"
-            where rescID='{self.rescID}' ''')
+            where resc_id='{self.resc_id}' ''')
 
 
 def _create_table():
     execute_sql('''
     CREATE TABLE IF NOT EXISTS "rescTable" (
         "researcher" TEXT NOT NULL,
-        "rescID" TEXT NOT NULL
+        "resc_id" TEXT NOT NULL
         "lab" TEXT
         "email" TEXT
-        PRIMARY KEY("rescID"),
-        UNIQUE("rescID")
+        PRIMARY KEY("resc_id"),
+        UNIQUE("resc_id")
     )
     ''')
 
@@ -97,15 +98,15 @@ def fetch_all():
     return [Researcher(row) for row in execute_sql("SELECT * FROM rescTable")]
 
 
-def fetch_by_id(rescID):
+def fetch_by_id(resc_id):
     """Fetch the researcher by id
 Parameters
 ------
-major: rescID
+major: resc_id
     The unique researcher ID for every researcher
 """
     return Researcher(execute_sql(
-        f"SELECT * FROM rescTable WHERE rescID = '{rescID}'").fetchone())
+        f"SELECT * FROM rescTable WHERE resc_id = '{resc_id}'").fetchone())
 
 
 def fetch_by_sql(clause, param):

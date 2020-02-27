@@ -6,6 +6,7 @@ _SETTINGS_FILE_PATH = homepath('~/.ArcheoSiteNamer/settings.ini')
 
 
 def reset_to_defaults():
+    """Reset settings to defaults"""
     _CONFIG["SETTINGS"] = {}
     _CONFIG["SETTINGS"]["desc_length"] = "20"
     _CONFIG["SETTINGS"]["theme"] = "Dark Brown"
@@ -14,6 +15,7 @@ def reset_to_defaults():
 
 
 def save():
+    """Save changes to settings file"""
     with open(_SETTINGS_FILE_PATH, 'w') as _configfile:
         _CONFIG.write(_configfile)
 
@@ -23,6 +25,7 @@ class CorruptSettingsError(Exception):
 
 
 def initialise():
+    """init the SETTINGS object"""
     makedirs(homepath('~/.ArcheoSiteNamer'), exist_ok=True)
     if fileExists(_SETTINGS_FILE_PATH):
         try:
@@ -44,9 +47,8 @@ def initialise():
                     "Y to reset, any key to exit: ").upper() == "Y":
                 reset_to_defaults()
                 return initialise()
-            else:
-                print("Exiting...")
-                exit()
+            print("Exiting...")
+            exit()
     else:
         reset_to_defaults()
         return initialise()

@@ -19,6 +19,7 @@ init_db()
 class Site:
     pass
 
+
 HEADERS = [
     "Major Zone",
     "Minor Zone",
@@ -29,8 +30,8 @@ HEADERS = [
     "Description",
     "Old Code"]
 _ATTRMAP = {
-    "majorZone": 0,
-    "minorZone": 1,
+    "major_zone": 0,
+    "minor_zone": 1,
     "latitude": 2,
     "longitude": 3,
     "abbr": 4,
@@ -39,6 +40,7 @@ _ATTRMAP = {
     "oldcode": 7}
 
 
+# skipcq: PYL-E0102
 class Site:
     """ The Site object is a python representation
 of the entry held in the database.
@@ -60,8 +62,8 @@ of the entry held in the database.
         insert(self)
         delete(self)
 """
-    majorZone: str
-    minorZone: str
+    major_zone: str
+    minor_zone: str
     latitude: float
     longitude: float
     abbr: str
@@ -77,8 +79,8 @@ self: Site
 row: iterable
     iterable indexed according _ATTRMAP
 """
-        self.majorZone = row[_ATTRMAP["majorZone"]]
-        self.minorZone = row[_ATTRMAP["minorZone"]]
+        self.major_zone = row[_ATTRMAP["major_zone"]]
+        self.minor_zone = row[_ATTRMAP["minor_zone"]]
         self.latitude = float(row[_ATTRMAP["latitude"]])
         self.longitude = float(row[_ATTRMAP["longitude"]])
         self.abbr = row[_ATTRMAP["abbr"]]
@@ -89,8 +91,8 @@ row: iterable
     def __str__(self, desc_length=20):
         temp = {}
         temp["Name"] = self.name
-        temp["ID"] = self.majorZone +\
-            self.minorZone +\
+        temp["ID"] = self.major_zone +\
+            self.minor_zone +\
             self.abbr
         temp["Longitude"] = self.longitude
         temp["Latitude"] = self.latitude
@@ -103,14 +105,14 @@ row: iterable
         return pprsite_map.fetch_paper_by_site(self.get_id())
 
     def get_id(self):
-        return self.majorZone + self.minorZone + self.abbr
+        return self.major_zone + self.minor_zone + self.abbr
 
     def insert(self):
         """ Inserts self into db."""
         execute_sql(
             "INSERT INTO siteTable VALUES (?,?,?,?,?,?,?,?)",
-            (self.majorZone,
-             self.minorZone,
+            (self.major_zone,
+             self.minor_zone,
              self.latitude,
              self.longitude,
              self.abbr,
@@ -123,8 +125,8 @@ row: iterable
         execute_sql(
             f'''
             DELETE FROM "siteTable"
-            where majorZone = '{self.majorZone}' AND
-            minorZone = '{self.minorZone}' AND
+            where major_zone = '{self.major_zone}' AND
+            minor_zone = '{self.minor_zone}' AND
             abbr = '{self.abbr}' '''
         )
 
@@ -132,16 +134,16 @@ row: iterable
 def _create_table():
     execute_sql('''
     CREATE TABLE IF NOT EXISTS "siteTable" (
-        "majorZone" TEXT NOT NULL,
-        "minorZone" TEXT NOT NULL,
+        "major_zone" TEXT NOT NULL,
+        "minor_zone" TEXT NOT NULL,
         "latitude" NUMBER NOT NULL,
         "longitude" NUMBER NOT NULL,
         "abbr" TEXT NOT NULL,
         "name" TEXT NOT NULL,
         "description" TEXT,
         "oldcode" TEXT,
-        PRIMARY KEY("majorZone", "minorZone", "abbr"),
-        UNIQUE("majorZone", "minorZone", "abbr")
+        PRIMARY KEY("major_zone", "minor_zone", "abbr"),
+        UNIQUE("major_zone", "minor_zone", "abbr")
     )
     ''')
 
@@ -163,8 +165,8 @@ abbr: String
     The abbr code of the site
 """
     return Site(execute_sql(
-        f"SELECT * FROM siteTable WHERE majorZone = '{major}' AND "
-        f"minorZone = '{minor}' AND abbr = '{abbr}'").fetchone())
+        f"SELECT * FROM siteTable WHERE major_zone = '{major}' AND "
+        f"minor_zone = '{minor}' AND abbr = '{abbr}'").fetchone())
 
 
 def fetch_by_sql(clause, param):

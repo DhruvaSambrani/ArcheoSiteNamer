@@ -24,6 +24,7 @@ import papers_db as pdb
 
 
 def add_entry(site: sdb.Site, paper: pdb.Paper):
+    """Add a site-paper pair."""
     execute_sql(
         '''INSERT into pprsiteMap VALUES(?,?)''', (
             site.get_id(),
@@ -33,9 +34,10 @@ def add_entry(site: sdb.Site, paper: pdb.Paper):
 
 
 def fetch_sites_of_paper(paper: pdb.Paper):
+    """Fetch all sites of a given paper"""
     return [sdb.Site(i) for i in
             execute_sql(
-                '''SELECT majorZone, minorZone,
+                '''SELECT major_zone, minor_zone,
                         longitude, latitude,
                         abbr, name,
                         siteTable.description, oldcode
@@ -47,7 +49,7 @@ def fetch_sites_of_paper(paper: pdb.Paper):
                     INNER JOIN
                         siteTable
                       ON pprsiteMap.site_id =
-                        siteTable.majorZone||siteTable.minorZone||siteTable.abbr
+                        siteTable.major_zone||siteTable.minor_zone||siteTable.abbr
                     WHERE doi = ?
                     ''', (paper.doi,)
     )
@@ -55,6 +57,7 @@ def fetch_sites_of_paper(paper: pdb.Paper):
 
 
 def fetch_papers_of_site(site: sdb.Site):
+    """Fetch all papers of a given site"""
     return [pdb.Paper(i) for i in
             execute_sql(
                 '''SELECT title, doi, paperTable.description, url
@@ -66,8 +69,8 @@ def fetch_papers_of_site(site: sdb.Site):
                     INNER JOIN
                         siteTable
                       ON pprsiteMap.site_id =
-                        siteTable.majorZone||siteTable.minorZone||siteTable.abbr
-                    WHERE majorZone||minorZone||abbr = ?
+                        siteTable.major_zone||siteTable.minor_zone||siteTable.abbr
+                    WHERE major_zone||minor_zone||abbr = ?
                     ''', (site.get_id(),)
     )
     ]

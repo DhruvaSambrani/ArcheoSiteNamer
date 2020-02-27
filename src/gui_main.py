@@ -40,18 +40,18 @@ def initialise():
         size=(500, 500),
         finalize=True
     )
-    updateTable(table)
+    update_table(table)
 
     return window
 
 
-def updateTable(table: sg.Table, tab: str = "Sites"):
+def update_table(table: sg.Table, tab: str = "Sites"):
     if tab == "Sites":
         table.update(
             values=[
                 [
-                    site.majorZone,
-                    site.minorZone,
+                    site.major_zone,
+                    site.minor_zone,
                     str(site.latitude),
                     str(site.longitude),
                     site.abbr,
@@ -88,7 +88,7 @@ def main():
         if event is None or event == "Exit":
             break
         if event == "combo":
-            updateTable(window.element("table"), values["combo"])
+            update_table(window.element("table"), values["combo"])
 
     window.close()
 

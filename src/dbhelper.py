@@ -8,6 +8,7 @@ _CURSOR = None
 
 
 def init_db(dbpath='~/.ArcheoSiteNamer/database.db'):
+    """Initialise the database connection"""
     global _DBPATH, _CURSOR, _CONN
     if not(_CONN and _CURSOR and _DBPATH):
         _DBPATH = path.expanduser(dbpath)
@@ -27,6 +28,7 @@ def commit_changes():
 
 
 def cleanup():
+    """Commit changes and close the db"""
     _CONN.commit()
     _CONN.close()
 
@@ -41,5 +43,6 @@ params: Tuple = ()
 
 
 def delete():
+    """Delete the database"""
     cleanup()
     os.remove(_DBPATH)
