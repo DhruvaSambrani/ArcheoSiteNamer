@@ -9,7 +9,7 @@ _CURSOR = None
 
 def init_db(dbpath='~/.ArcheoSiteNamer/database.db'):
     """Initialise the database connection"""
-    global _DBPATH, _CURSOR, _CONN
+    global _DBPATH, _CURSOR, _CONN  # skipcq: PYL-W0603
     if not(_CONN and _CURSOR and _DBPATH):
         _DBPATH = path.expanduser(dbpath)
         print(_DBPATH)
