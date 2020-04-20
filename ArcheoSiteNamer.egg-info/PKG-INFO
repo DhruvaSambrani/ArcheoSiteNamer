@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: ArcheoSiteNamer
+Version: 0.0.1
+Summary: A small example package
+Home-page: https://github.com/pypa/sampleproject
+Author: Dhruva Sambrani
+Author-email: author@example.com
+License: UNKNOWN
+Description: # ArcheoSiteNamer
+        
+        [![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/DhruvaSambrani/ArcheoSiteNamer/?ref=repository-badge)
+        [![Build Status](https://travis-ci.org/DhruvaSambrani/ArcheoSiteNamer.svg?branch=master)](https://travis-ci.org/DhruvaSambrani/ArcheoSiteNamer)
+        
+        Name an archeological site and add to a local database
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown

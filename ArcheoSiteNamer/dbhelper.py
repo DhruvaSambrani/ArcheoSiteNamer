@@ -12,7 +12,7 @@ def init_db(dbpath='~/.ArcheoSiteNamer/database.db'):
     global _DBPATH, _CURSOR, _CONN  # skipcq: PYL-W0603
     if not(_CONN and _CURSOR and _DBPATH):
         _DBPATH = path.expanduser(dbpath)
-        print(_DBPATH)
+        # print(_DBPATH)
         try:
             _CONN = sqlite3.connect(_DBPATH)
         except sqlite3.OperationalError:

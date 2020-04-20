@@ -18,9 +18,9 @@ fetch_by_site()
 """
 
 
-from dbhelper import execute_sql
-import site_db as sdb
-import papers_db as pdb
+from ArcheoSiteNamer.dbhelper import execute_sql
+import ArcheoSiteNamer.site_db as sdb
+import ArcheoSiteNamer.papers_db as pdb
 
 
 def add_entry(site: sdb.Site, paper: pdb.Paper):
@@ -87,4 +87,5 @@ def _create_table():
     ''')
 
 
-_create_table()
+def init_db():
+    _create_table()

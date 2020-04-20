@@ -11,15 +11,14 @@ fetch_by_id()
 fetch_all()
 fetch_by_sql()
 """
-from dbhelper import execute_sql, init_db
-init_db()
+from ArcheoSiteNamer.dbhelper import execute_sql, init_db
 
 
 class Site:
     pass
 
 
-import pprsite_map
+import ArcheoSiteNamer.pprsite_map as pprsite_map
 
 HEADERS = [
     "Major Zone",
@@ -182,4 +181,6 @@ params: Tuple = ()
     return [Site(row) for row in execute_sql(query, param)]
 
 
-_create_table()
+def init_db():
+    _create_table()
+    pprsite_map.init_db()

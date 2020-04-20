@@ -12,7 +12,14 @@ fetch_by_doi()
 fetch_by_sql()
 """
 
-from dbhelper import execute_sql
+from ArcheoSiteNamer.dbhelper import execute_sql
+
+
+class Paper:
+    pass
+
+
+import ArcheoSiteNamer.pprsite_map as pprsite_map
 
 HEADERS = [
     "Title",
@@ -90,6 +97,9 @@ row: iterable
             '''
         )
 
+    def fetch_sites(self):
+        return pprsite_map.fetch_paper_by_site(self.get_id())
+
 
 def _create_table():
     execute_sql('''
@@ -132,4 +142,6 @@ params: Tuple = ()
     return [Paper(row) for row in execute_sql(query, param)]
 
 
-_create_table()
+def init_db():
+    _create_table()
+    pprsite_map.init_db()

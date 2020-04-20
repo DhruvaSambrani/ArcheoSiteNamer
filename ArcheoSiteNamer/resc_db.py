@@ -1,6 +1,5 @@
 
-from dbhelper import execute_sql, init_db
-init_db()
+from ArcheoSiteNamer.dbhelper import execute_sql, init_db
 
 
 class Researcher:
@@ -84,9 +83,9 @@ def _create_table():
     execute_sql('''
     CREATE TABLE IF NOT EXISTS "rescTable" (
         "researcher" TEXT NOT NULL,
-        "resc_id" TEXT NOT NULL
-        "lab" TEXT
-        "email" TEXT
+        "resc_id" TEXT NOT NULL,
+        "lab" TEXT,
+        "email" TEXT,
         PRIMARY KEY("resc_id"),
         UNIQUE("resc_id")
     )
@@ -121,4 +120,5 @@ params: Tuple = ()
     return [Researcher(row) for row in execute_sql(query, param)]
 
 
-_create_table()
+def init_db():
+    _create_table()
